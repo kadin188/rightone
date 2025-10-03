@@ -1,4 +1,116 @@
-      { name: "Eston", lat: 51.4000, lon: -107.2833 },
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Closest O'Brians Automotive Finder</title>
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin:0; padding:0; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background: linear-gradient(to bottom, #1c1c1c, #2c2c2c); color:#fff; min-height:100vh; display:flex; justify-content:center; align-items:center; flex-direction:column; padding:20px; }
+    .container { display:flex; flex-direction:column; align-items:center; gap:15px; max-width:600px; width:100%; padding:20px; border-radius:12px; background:rgba(0,0,0,0.5); box-shadow:0 8px 20px rgba(0,0,0,0.6); position:relative; }
+    h1 { font-size:2.2rem; color:#f4c542; margin-bottom:10px; text-shadow:2px 2px 6px #000; letter-spacing:1px; }
+    h3 { font-weight:normal; font-size:1rem; color:#ccc; margin-bottom:20px; }
+    input { padding:12px 20px; font-size:16px; border:none; border-radius:8px; width:250px; margin:5px 0; outline:none; }
+    button { padding:12px 25px; font-size:16px; border:none; border-radius:8px; background:linear-gradient(45deg, #007bff, #00c6ff); color:#fff; font-weight:bold; cursor:pointer; transition:all 0.3s ease; box-shadow:0px 4px 6px rgba(0,0,0,0.4); margin-top:5px; }
+    button:hover { transform:translateY(-2px); box-shadow:0px 6px 10px rgba(0,0,0,0.5); }
+    .suggestions { position:absolute; top:115px; background:white; color:black; width:250px; border-radius:6px; max-height:200px; overflow-y:auto; box-shadow:0 4px 10px rgba(0,0,0,0.3); z-index:999; }
+    .suggestion-item { padding:10px; cursor:pointer; }
+    .suggestion-item:hover { background:#007bff; color:white; }
+    .result { margin-top:30px; font-size:1.2rem; padding:20px 30px; border-radius:10px; background:rgba(255,255,255,0.1); border:2px solid #f4c542; text-align:center; box-shadow:0px 4px 8px rgba(0,0,0,0.5); min-width:300px; }
+    .result::before { content:"🚗 "; }
+    .result.animate { animation: fadeIn 0.5s ease-in-out; }
+    @keyframes fadeIn { from { opacity:0; transform:translateX(-10px);} to{opacity:1; transform:translateX(0);} }
+    .override-box { margin-top:25px; padding:15px; border-radius:8px; background:rgba(255,255,255,0.1); width:100%; }
+    .override-box h3 { margin-bottom:10px; color:#f4c542; }
+    .override-box input { width:100%; margin-bottom:8px; border-radius:6px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Find Closest O'Brians Automotive</h1>
+    <h3>Created by Kadin</h3>
+
+    <div style="position:relative;">
+      <input id="town" type="text" placeholder="Enter a town or reservation in SK" autocomplete="off"/>
+      <div id="suggestions" class="suggestions"></div>
+      <button id="searchBtn">Search</button>
+    </div>
+
+    <div class="result" id="result"></div>
+
+    <div class="override-box">
+      <h3>Manual Overrides</h3>
+      <input id="customName" type="text" placeholder="Town/Reservation Name" />
+      <input id="customObrians" type="text" placeholder="Closest O'Brians Name (e.g., Saskatoon)" />
+      <input id="customDistance" type="number" placeholder="Distance (km)" />
+      <button id="addBtn">Add Override</button>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD7a1z9T3Hxicqy7-fTvW71XrunRz_hr-k",
+      authDomain: "obrians-finder.firebaseapp.com",
+      projectId: "obrians-finder",
+      storageBucket: "obrians-finder.firebasestorage.app",
+      messagingSenderId: "319977662089",
+      appId: "1:319977662089:web:3e2821573e24e555b14858",
+      measurementId: "G-LHJX7DG4RS"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Actual dealership locations (ONLY real O'Brians)
+    const locations = [
+      { name: "Saskatoon", lat: 52.1332, lon: -106.6700 },
+      { name: "Regina", lat: 50.4452, lon: -104.6189 },
+      { name: "Prince Albert", lat: 53.2001, lon: -105.7670 }
+    ];
+
+    // Expanded list of Saskatchewan towns, cities, and First Nations
+    const combinedPlaces = [
+      // Cities
+      { name: "Moose Jaw", lat: 50.3961, lon: -105.5340 },
+      { name: "Yorkton", lat: 51.2175, lon: -102.4628 },
+      { name: "Swift Current", lat: 50.2853, lon: -107.7972 },
+      { name: "North Battleford", lat: 52.7575, lon: -108.2861 },
+      { name: "Lloydminster", lat: 53.2833, lon: -110.0000 },
+      { name: "Estevan", lat: 49.1406, lon: -102.9894 },
+      { name: "Weyburn", lat: 49.6689, lon: -103.8597 },
+      { name: "Humboldt", lat: 52.2000, lon: -105.1000 },
+      { name: "Melfort", lat: 52.8667, lon: -104.6000 },
+      { name: "Melville", lat: 51.9000, lon: -102.8000 },
+      { name: "Kindersley", lat: 51.4675, lon: -109.1417 },
+      { name: "Battleford", lat: 52.7806, lon: -108.2792 },
+      { name: "Meadow Lake", lat: 54.1333, lon: -108.4333 },
+      { name: "Nipawin", lat: 53.3333, lon: -104.0167 },
+      { name: "La Ronge", lat: 55.1000, lon: -105.2833 },
+      { name: "Estevan", lat: 49.1406, lon: -102.9894 },
+      { name: "Warman", lat: 52.1333, lon: -106.6167 },
+      { name: "Martensville", lat: 52.3333, lon: -106.6167 },
+      { name: "Carlyle", lat: 49.0833, lon: -102.8333 },
+      { name: "Carnduff", lat: 49.2833, lon: -102.5000 },
+      { name: "Canora", lat: 51.7000, lon: -102.4667 },
+      { name: "Colonsay", lat: 52.4333, lon: -105.3000 },
+      { name: "Craik", lat: 51.3000, lon: -105.4000 },
+      { name: "Cupar", lat: 50.8000, lon: -104.6000 },
+      { name: "Cut Knife", lat: 52.4667, lon: -108.0000 },
+      { name: "Dalmeny", lat: 52.4167, lon: -106.6167 },
+      { name: "Davidson", lat: 51.3667, lon: -105.0167 },
+      { name: "Delisle", lat: 51.4000, lon: -106.1667 },
+      { name: "Dinsmore", lat: 51.4167, lon: -107.0000 },
+      { name: "Dodsland", lat: 51.2000, lon: -107.4167 },
+      { name: "Eagle Hill", lat: 50.8000, lon: -106.4167 },
+      { name: "Elbow", lat: 51.6000, lon: -106.2000 },
+      { name: "Englefeld", lat: 52.6000, lon: -104.9000 },
+      { name: "Eston", lat: 51.400
+::contentReference[oaicite:0]{index=0}
+       { name: "Eston", lat: 51.4000, lon: -107.2833 },
       { name: "Fertile Valley", lat: 51.3000, lon: -107.6000 },
       { name: "Fort Qu'Appelle", lat: 50.7667, lon: -103.7667 },
       { name: "Gravelbourg", lat: 49.9833, lon: -105.6000 },
