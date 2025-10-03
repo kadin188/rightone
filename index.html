@@ -23,17 +23,31 @@
     .result::before { content:"🚗 "; }
     .result.animate { animation: fadeIn 0.45s ease-in-out; }
     @keyframes fadeIn { from { opacity:0; transform:translateY(-6px);} to{opacity:1; transform:translateY(0);} }
+
+    /* Car animation */
+    @keyframes drive { from { left: -50px; } to { left: 100%; } }
+    #car.animate { animation: drive 1s linear infinite; }
+
     .override-box { margin-top:18px; padding:14px; border-radius:8px; background:rgba(255,255,255,0.04); width:100%; }
     .override-box h3 { margin-bottom:8px; color:#f4c542; }
     .override-row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
     .override-row input { flex:1; min-width:160px; }
     .note { font-size:0.85rem; color:#bbb; margin-top:8px; }
+
+    /* Car animation container */
+    #car-animation { display:none; position:relative; height:40px; width:100%; overflow:hidden; margin-bottom:10px; }
+    #car { position:absolute; left:-50px; top:0; font-size:32px; }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Find Closest O'Brians Automotive</h1>
     <h3>Created by Kadin</h3>
+
+    <!-- Car animation -->
+    <div id="car-animation">
+      <div id="car">🚗</div>
+    </div>
 
     <div style="position:relative; width:100%; display:flex; justify-content:center;">
       <input id="town" type="text" placeholder="Enter a town or reservation in SK" autocomplete="off"/>
@@ -59,11 +73,9 @@
 
   <!-- Main app script (module) -->
   <script type="module">
-    // Firebase imports
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
     import { getFirestore, collection, getDocs, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-    // Firebase config (your project)
     const firebaseConfig = {
       apiKey: "AIzaSyD7a1z9T3Hxicqy7-fTvW71XrunRz_hr-k",
       authDomain: "obrians-finder.firebaseapp.com",
@@ -73,19 +85,15 @@
       appId: "1:319977662089:web:3e2821573e24e555b14858",
       measurementId: "G-LHJX7DG4RS"
     };
-
-    // Init Firebase
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // ===== Your dealership location nodes (unchanged) =====
     const locations = [
       { name: "Saskatoon", lat: 52.1332, lon: -106.6700 },
       { name: "Regina", lat: 50.4452, lon: -104.6189 },
       { name: "Prince Albert", lat: 53.2001, lon: -105.7670 }
     ];
 
-    // ===== Full towns array (from your original list) =====
     const towns = [
       { name: "North Battleford", lat: 52.7575, lon: -108.2861 },
       { name: "Battleford", lat: 52.7333, lon: -108.3114 },
@@ -111,14 +119,12 @@
       { name: "La Ronge", lat: 55.1000, lon: -105.3000 },
       { name: "Creighton", lat: 54.7667, lon: -101.8833 },
       { name: "Buffalo Narrows", lat: 55.8667, lon: -108.5333 },
-      { name: "Kindersley", lat: 51.4667, lon: -109.1500 },
       { name: "Lanigan", lat: 51.9667, lon: -105.0167 },
       { name: "Prince Albert", lat: 53.2001, lon: -105.7670 },
       { name: "Saskatoon", lat: 52.1332, lon: -106.6700 },
       { name: "Regina", lat: 50.4452, lon: -104.6189 }
     ];
 
-    // ===== Full reservations / First Nations list (from your original list) =====
     const reservations = [
       { name: "Whitecap Dakota First Nation", lat: 51.923, lon: -106.700 },
       { name: "Muskeg Lake Cree Nation", lat: 52.866, lon: -106.517 },
@@ -145,14 +151,10 @@
       { name: "Loon Lake", lat: 54.212, lon: -109.05 }
     ];
 
-    // ===== Combined data used for Fuse.js search =====
-    let combinedPlaces = [...towns, ...reservations]; // will push overrides into this array
+    let combinedPlaces = [...towns, ...reservations];
     let fuse = null;
-
-    // Suggestion element
     const suggestionBox = document.getElementById("suggestions");
 
-    // Haversine distance (km)
     function haversine(lat1, lon1, lat2, lon2) {
       const R = 6371;
       const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -163,123 +165,82 @@
       return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
     }
 
-    // Load overrides from Firestore (collection "overrides")
     async function loadOverrides() {
       try {
         const overridesCol = collection(db, "overrides");
         const snapshot = await getDocs(overridesCol);
         snapshot.forEach(docSnap => {
           const data = docSnap.data();
-          // store as place entries; doc id used as the place name key
           combinedPlaces.push({
             name: docSnap.id,
             obrians: data.obrians,
             distance: data.distance,
-            // optional lat/lon if you ever store them
             lat: data.lat || undefined,
             lon: data.lon || undefined
           });
         });
-      } catch (err) {
-        console.error("Error loading overrides:", err);
-      }
-
-      // initialize Fuse after combinedPlaces is ready
+      } catch (err) { console.error("Error loading overrides:", err); }
       fuse = new Fuse(combinedPlaces, { keys: ["name"], includeScore: true, threshold: 0.4 });
     }
 
-    // Add override (writes to Firestore and updates local combinedPlaces)
     async function addOverride() {
       const nameEl = document.getElementById("customName");
       const obEl = document.getElementById("customObrians");
       const distEl = document.getElementById("customDistance");
-
       const name = nameEl.value.trim();
       const obrians = obEl.value.trim();
       const distance = parseFloat(distEl.value);
-
-      if (!name || !obrians || Number.isNaN(distance)) {
-        alert("Please fill in all fields correctly!");
-        return;
-      }
-
+      if (!name || !obrians || Number.isNaN(distance)) { alert("Please fill in all fields correctly!"); return; }
       const docId = name.toLowerCase();
-
       try {
-        // Save to Firestore
-        await setDoc(doc(db, "overrides", docId), {
-          obrians,
-          distance
-          // optionally you can store lat/lon here if desired
-        });
-
-        // Add to combinedPlaces for immediate availability
+        await setDoc(doc(db, "overrides", docId), { obrians, distance });
         combinedPlaces.push({ name, obrians, distance });
         if (fuse) fuse.setCollection(combinedPlaces);
-
-        // Clear inputs
-        nameEl.value = "";
-        obEl.value = "";
-        distEl.value = "";
+        nameEl.value = ""; obEl.value = ""; distEl.value = "";
         alert("Override saved and visible for everyone.");
-      } catch (err) {
-        console.error("Failed to save override:", err);
-        alert("Failed to save override. Check browser console.");
-      }
+      } catch (err) { console.error("Failed to save override:", err); alert("Failed to save override. Check browser console."); }
     }
 
-    // Find closest O'Brians and display result
     function findClosest(inputOverride) {
       if (!fuse) { alert("Still loading data; please wait a moment."); return; }
       const input = (inputOverride || document.getElementById("town").value).trim();
       if (!input) { alert("Please enter a town or reservation!"); return; }
 
-      // Search via Fuse
-      const results = fuse.search(input);
-      if (!results || results.length === 0) {
-        document.getElementById("result").innerText = "Town or reservation not found!";
-        return;
-      }
+      const carAnimContainer = document.getElementById("car-animation");
+      const car = document.getElementById("car");
+      carAnimContainer.style.display = "block";
+      car.classList.add("animate");
 
-      const place = results[0].item;
-      let closest = null;
-      let minDist = Infinity;
+      setTimeout(() => {
+        const results = fuse.search(input);
+        if (!results || results.length === 0) {
+          document.getElementById("result").innerText = "Town or reservation not found!";
+        } else {
+          const place = results[0].item;
+          let closest = null; let minDist = Infinity;
+          if (place.obrians && place.distance) { closest = { name: place.obrians }; minDist = place.distance; }
+          else if (place.lat !== undefined && place.lon !== undefined) {
+            locations.forEach(loc => { const d = haversine(place.lat, place.lon, loc.lat, loc.lon); if (d < minDist) { minDist = d; closest = loc; } });
+          } else { document.getElementById("result").innerText = "No distance data for this place."; closest=null; }
 
-      // If override saved with explicit obrians+distance, use it
-      if (place.obrians && place.distance) {
-        closest = { name: place.obrians };
-        minDist = place.distance;
-      } else if (place.lat !== undefined && place.lon !== undefined) {
-        // compute haversine to all dealership locations
-        locations.forEach(loc => {
-          const d = haversine(place.lat, place.lon, loc.lat, loc.lon);
-          if (d < minDist) { minDist = d; closest = loc; }
-        });
-      } else {
-        // fallback: not enough data
-        document.getElementById("result").innerText = "No distance data for this place.";
-        return;
-      }
-
-      const resultDiv = document.getElementById("result");
-      resultDiv.innerText = `Closest O'Brians: ${closest.name} (${minDist.toFixed(1)} km from ${place.name})`;
-      resultDiv.classList.remove("animate");
-      void resultDiv.offsetWidth;
-      resultDiv.classList.add("animate");
+          if (closest) {
+            const resultDiv = document.getElementById("result");
+            resultDiv.innerText = `Closest O'Brians: ${closest.name} (${minDist.toFixed(1)} km from ${place.name})`;
+            resultDiv.classList.remove("animate"); void resultDiv.offsetWidth; resultDiv.classList.add("animate");
+          }
+        }
+        car.classList.remove("animate"); carAnimContainer.style.display="none";
+      }, 700);
     }
 
-    // Initialize: load overrides, then wire UI
     await loadOverrides();
 
-    // UI wiring
     const townInput = document.getElementById("town");
     townInput.addEventListener("input", () => {
       const query = townInput.value.trim().toLowerCase();
       suggestionBox.innerHTML = "";
       if (!query) { suggestionBox.style.display = "none"; return; }
       suggestionBox.style.display = "block";
-
-      // simple startsWith matches for suggestion (keeps behavior like your original)
       const matches = combinedPlaces.filter(p => p.name.toLowerCase().startsWith(query)).slice(0, 30);
       matches.forEach(match => {
         const div = document.createElement("div");
@@ -295,19 +256,16 @@
       });
     });
 
-    // Buttons
     document.getElementById("searchBtn").addEventListener("click", () => findClosest());
     document.getElementById("addBtn").addEventListener("click", () => addOverride());
-
-    // Hide suggestions if clicking outside
     document.addEventListener("click", (e) => {
       if (!document.getElementById("town").contains(e.target) && !suggestionBox.contains(e.target)) {
-        suggestionBox.innerHTML = "";
-        suggestionBox.style.display = "none";
+        suggestionBox.innerHTML = ""; suggestionBox.style.display = "none";
       }
     });
 
   </script>
 </body>
 </html>
+
 
