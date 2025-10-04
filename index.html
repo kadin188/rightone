@@ -94,8 +94,7 @@
       { name: "Prince Albert", lat: 53.2001, lon: -105.7670 }
     ];
 
-    const towns = [
-     const towns = [
+   const towns = [
   { name: "North Battleford", lat: 52.7575, lon: -108.2861 },
   { name: "Battleford", lat: 52.7333, lon: -108.3114 },
   { name: "Lloydminster", lat: 53.2833, lon: -110.0000 },
@@ -152,14 +151,12 @@
   { name: "Chaplin", lat: 50.47000, lon: -106.67000 },
   { name: "Carlyle", lat: 49.63334, lon: -102.26765 },
   { name: "Cut Knife", lat: 52.73333, lon: -109.33333 },
-  { name: "Cutknife", lat: 52.7333, lon: -109.3333 },
   { name: "Eston", lat: 51.21667, lon: -108.63333 },
   { name: "Indian Head", lat: 50.51667, lon: -103.61667 },
   { name: "Jasper", lat: 52.0, lon: -106.0 }
 ];
 
-
-  const reservations = [
+const reservations = [
   { name: "Whitecap Dakota First Nation", lat: 51.923, lon: -106.700 },
   { name: "Muskeg Lake Cree Nation", lat: 52.866, lon: -106.517 },
   { name: "Mistawasis Nêhiyawak", lat: 52.900, lon: -106.767 },
@@ -169,46 +166,13 @@
   { name: "Star Blanket Cree Nation", lat: 50.766, lon: -103.617 },
   { name: "Onion Lake Cree Nation", lat: 53.7167, lon: -109.5000 },
   { name: "Thunderchild First Nation", lat: 52.7833, lon: -109.1670 },
-  
   // Additional reserves
   { name: "Ahtahkakoop 104", lat: 53.3856, lon: -106.9012 },
   { name: "Day Star 87", lat: 51.7764, lon: -105.1987 },
   { name: "Poundmaker 114-6A2", lat: 52.7438, lon: -109.83797 },
-  { name: "Cowessess 73A", lat: 50.6170, lon: -102.5057 },
-  { name: "Flying Dust First Nation 105D", lat: 54.0170, lon: -108.6333 },
-  { name: "Red Earth First Nation 29", lat: 53.9920, lon: -102.3840 },
-  { name: "Sakimay First Nation 74-2", lat: 50.7360, lon: -103.4167 },
-  { name: "Moosomin 112L", lat: 51.0000, lon: -104.0000 },
-  { name: "Sweetgrass 113B", lat: 51.0000, lon: -106.0000 },
-  { name: "Kahkewistahaw 72-B", lat: 50.6167, lon: -102.4167 },
-  { name: "Keeseekoose 66-CA-01", lat: 51.0000, lon: -103.0000 },
-  { name: "Canoe Lake 165", lat: 54.0000, lon: -106.0000 },
-  { name: "Hatchet Lake 220", lat: 55.0000, lon: -105.0000 },
-  { name: "Fond du Lac 227", lat: 56.0000, lon: -105.0000 },
-  { name: "Clearwater River 227", lat: 54.0000, lon: -105.0000 },
-  { name: "Black Lake 224", lat: 55.0000, lon: -106.0000 },
-  { name: "Buffalo River 193", lat: 54.0000, lon: -106.0000 },
-  { name: "Birch Narrows 194", lat: 53.0000, lon: -107.0000 },
-  { name: "English River 192", lat: 53.0000, lon: -107.0000 },
-  { name: "Cumberland House 20", lat: 53.0000, lon: -104.0000 },
-  { name: "Moose Lake 106", lat: 53.0000, lon: -105.0000 },
-  { name: "Piapot 75K", lat: 51.0000, lon: -105.0000 },
-  { name: "Red Pheasant 118", lat: 53.0000, lon: -107.0000 },
-  { name: "Saulteaux 159", lat: 53.0000, lon: -107.0000 },
-  { name: "Shoal Lake 28A", lat: 53.0000, lon: -106.0000 },
-  { name: "Standing Buffalo 81", lat: 51.0000, lon: -104.0000 },
-  { name: "Star Blanket 83", lat: 51.0000, lon: -105.0000 },
-  { name: "Sturgeon Lake 159", lat: 53.0000, lon: -106.0000 },
-  { name: "Sweetgrass 113", lat: 51.0000, lon: -106.0000 },
-  { name: "The Key 118", lat: 53.0000, lon: -107.0000 },
-  { name: "Thunderchild 114", lat: 52.0000, lon: -108.0000 },
-  { name: "Waterhen Lake 205", lat: 53.0000, lon: -106.0000 },
-  { name: "White Bear 159", lat: 53.0000, lon: -107.0000 },
-  { name: "Whitecap 94", lat: 51.9230, lon: -106.7000 },
-  { name: "Witchekan Lake 118", lat: 53.0000, lon: -107.0000 },
-  { name: "Wood Mountain 159", lat: 50.0000, lon: -106.0000 }
+  { name: "Cowessess 73A", lat: 50.6170, lon: -102.5057 }
+  // ...add more as needed
 ];
-
     let combinedPlaces = [...towns, ...reservations];
     let fuse = new Fuse(combinedPlaces, { keys:["name"], includeScore:true, threshold:0.4 });
 
