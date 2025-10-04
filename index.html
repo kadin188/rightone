@@ -94,8 +94,55 @@
       { name: "Prince Albert", lat: 53.2001, lon: -105.7670 }
     ];
 
-    const towns = [ /* ... same towns ... */ ];
-    const reservations = [ /* ... same reservations ... */ ];
+   
+    const towns = [
+      { name: "North Battleford", lat: 52.7575, lon: -108.2861 },
+      { name: "Battleford", lat: 52.7333, lon: -108.3114 },
+      { name: "Lloydminster", lat: 53.2833, lon: -110.0000 },
+      { name: "Meadow Lake", lat: 54.1333, lon: -108.4333 },
+      { name: "Kindersley", lat: 51.4667, lon: -109.1500 },
+      { name: "Rosetown", lat: 51.5500, lon: -107.9833 },
+      { name: "Biggar", lat: 52.0667, lon: -107.9833 },
+      { name: "Humboldt", lat: 52.2000, lon: -105.1333 },
+      { name: "Melfort", lat: 52.8667, lon: -104.6170 },
+      { name: "Tisdale", lat: 52.8500, lon: -104.0500 },
+      { name: "Nipawin", lat: 53.3667, lon: -104.0000 },
+      { name: "Wynyard", lat: 51.7667, lon: -104.1833 },
+      { name: "Watrous", lat: 51.6667, lon: -105.4667 },
+      { name: "Outlook", lat: 51.5000, lon: -107.0500 },
+      { name: "Assiniboia", lat: 49.6333, lon: -105.9833 },
+      { name: "Weyburn", lat: 49.6611, lon: -103.8522 },
+      { name: "Estevan", lat: 49.1392, lon: -102.9860 },
+      { name: "Melville", lat: 50.9167, lon: -102.8000 },
+      { name: "Foam Lake", lat: 51.6500, lon: -103.5333 },
+      { name: "Maple Creek", lat: 49.9167, lon: -109.4667 },
+      { name: "Shaunavon", lat: 49.6500, lon: -108.4167 },
+      { name: "La Ronge", lat: 55.1000, lon: -105.3000 },
+      { name: "Creighton", lat: 54.7667, lon: -101.8833 },
+      { name: "Buffalo Narrows", lat: 55.8667, lon: -108.5333 }
+    ];
+       const reservations = [
+      { name: "Whitecap Dakota First Nation", lat: 51.923, lon: -106.700 },
+      { name: "Muskeg Lake Cree Nation", lat: 52.866, lon: -106.517 },
+      { name: "Mistawasis Nêhiyawak", lat: 52.900, lon: -106.767 },
+      { name: "One Arrow First Nation", lat: 52.733, lon: -106.167 },
+      { name: "Big River First Nation", lat: 53.833, lon: -107.017 },
+      { name: "Cowessess First Nation", lat: 50.415, lon: -102.241 },
+      { name: "Star Blanket Cree Nation", lat: 50.766, lon: -103.617 },
+      { name: "Onion Lake Cree Nation", lat: 53.7167, lon: -109.5000 },
+      { name: "Thunderchild First Nation", lat: 52.7833, lon: -109.1670 },
+      { name: "Peepeekisis Cree Nation", lat: 50.7500, lon: -103.4670 },
+      { name: "Muscowpetung Saulteaux Nation", lat: 50.8333, lon: -104.4000 },
+      { name: "Ahtahkakoop Cree Nation", lat: 53.0000, lon: -106.5500 },
+      { name: "Little Pine First Nation", lat: 53.1000, lon: -107.5000 },
+      { name: "Cumberland House Cree Nation", lat: 53.9500, lon: -102.2000 },
+      { name: "Fond du Lac Dene Nation", lat: 59.6333, lon: -108.0500 },
+      { name: "Ochapowace First Nation", lat: 50.2667, lon: -102.7833 },
+      { name: "Hatchet Lake First Nation", lat: 58.5833, lon: -105.2500 },
+      { name: "Moosomin First Nation", lat: 50.0833, lon: -102.7167 },
+      { name: "Red Pheasant Cree Nation", lat: 53.1333, lon: -108.5833 },
+      { name: "Beardy's & Okemasis Cree Nation", lat: 52.9500, lon: -106.1000 }
+    ];
 
     let combinedPlaces = [...towns, ...reservations];
     let fuse = null;
