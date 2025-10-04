@@ -80,7 +80,7 @@
       apiKey: "AIzaSyD7a1z9T3Hxicqy7-fTvW71XrunRz_hr-k",
       authDomain: "obrians-finder.firebaseapp.com",
       projectId: "obrians-finder",
-      storageBucket: "obrians-finder.firebasestorage.app",
+      storageBucket: "obrians-finder.appspot.com",
       messagingSenderId: "319977662089",
       appId: "1:319977662089:web:3e2821573e24e555b14858",
       measurementId: "G-LHJX7DG4RS"
@@ -94,7 +94,6 @@
       { name: "Prince Albert", lat: 53.2001, lon: -105.7670 }
     ];
 
-   
     const towns = [
       { name: "North Battleford", lat: 52.7575, lon: -108.2861 },
       { name: "Battleford", lat: 52.7333, lon: -108.3114 },
@@ -119,67 +118,13 @@
       { name: "Shaunavon", lat: 49.6500, lon: -108.4167 },
       { name: "La Ronge", lat: 55.1000, lon: -105.3000 },
       { name: "Creighton", lat: 54.7667, lon: -101.8833 },
-      { name: "Buffalo Narrows", lat: 55.8667, lon: -108.5333 }
-         { name: "Canora", lat: 51.6333, lon: -102.4333 },
-  { name: "Cabri", lat: 50.6167, lon: -108.4500 },
-  { name: "Shellbrook", lat: 53.2167, lon: -106.4000 },
-  { name: "Spiritwood", lat: 53.3667, lon: -107.5167 },
-  { name: "Sturgis", lat: 51.8500, lon: -102.5333 },
-  { name: "Strasbourg", lat: 51.0700, lon: -104.9500 },
-  { name: "Sedley", lat: 50.1709, lon: -104.0141 },     // from GeoNames / place-names data :contentReference[oaicite:0]{index=0}
-  { name: "Simpson", lat: 51.4500, lon: -105.4500 },
-  { name: "Stanley Mission", lat: 55.4200, lon: -104.5500 },
-  { name: "Canoe Lake", lat: 55.10, lon: -108.32 },
-  { name: "Canoe Narrows", lat: 55.17, lon: -108.15 },
-  { name: "Canwood", lat: 53.37, lon: -106.60 },
-  { name: "Carlyle", lat: 49.63, lon: -102.27 },
-  { name: "Carnduff", lat: 49.17, lon: -101.78 },
-  { name: "Chaplin", lat: 50.47, lon: -106.67 },
-  { name: "Chitek", lat: 53.78, lon: -107.75 },
-  { name: "Gull Lake", lat: 50.1533, lon: -107.5472 },   // approximate from article :contentReference[oaicite:1]{index=1}  
-  { name: "Redvers", lat: 49.0567, lon: -102.0539 },     // from Redvers article :contentReference[oaicite:2]{index=2}  
-  { name: "Govan", lat: 51.9500, lon: -104.5000 },       // approximate from Govan article :contentReference[oaicite:3]{index=3}  
-  { name: "Osler", lat: 52.2500, lon: -106.5167 }  
-    const moreCitiesTowns = [
-  { name: "Dalmeny", lat: 52.33339, lon: -106.76792 },  
-  { name: "Pilot Butte", lat: 50.46678, lon: -104.41778 },  
-  { name: "Unity", lat: 52.45014, lon: -109.16816 },  
-  { name: "Wadena", lat: 51.94999, lon: -103.80109 },  
-  { name: "Warman", lat: 52.31679, lon: -106.56791 },  
-  { name: "White City", lat: 50.43338, lon: -104.36778 },  
-  { name: "Wilkie", lat: 52.41683, lon: -108.70142 },  
-  { name: "Gravelbourg", lat: 49.88336, lon: -106.55122 },  
-  { name: "Hudson Bay", lat: 52.85003, lon: -102.38425 },  
-  { name: "Oxbow", lat: 49.23335, lon: -102.16760 },  
-  { name: "Preeceville", lat: 51.94998, lon: -102.66766 },  
-  { name: "Redvers", lat: 49.05670, lon: -102.05390 },  
-  { name: "Rosthern", lat: 52.66679, lon: -106.33446 },  
-  { name: "Whitewood", lat: 49.98680, lon: -102.32000 },  
-  { name: "Aberdeen", lat: 52.41667, lon: -106.91667 },  
-  { name: "Alameda", lat: 50.53611, lon: -101.88778 },  
-  { name: "Arcola", lat: 49.55167, lon: -102.14500 },  
-  { name: "Asquith", lat: 52.46667, lon: -106.96667 },  
-  { name: "Balcarres", lat: 50.78333, lon: -103.48333 },  
-  { name: "Balgonie", lat: 50.51667, lon: -104.46667 },  
-  { name: "Bengough", lat: 50.11667, lon: -105.20000 },  
-  { name: "Bienfait", lat: 49.99639, lon: -102.79639 },  
-  { name: "Birch Hills", lat: 52.91667, lon: -105.66667 },  
-  { name: "Blaine Lake", lat: 53.33333, lon: -106.28333 },  
-  { name: "Bruno", lat: 52.93333, lon: -105.36667 },  
-  { name: "Cabri", lat: 50.61667, lon: -108.45000 },  
-  { name: "Carnduff", lat: 49.16667, lon: -101.78333 },  
-  { name: "Chaplin", lat: 50.47000, lon: -106.67000 },  
-  { name: "Carlyle", lat: 49.63334, lon: -102.26765 },  
-  { name: "Cut Knife", lat: 52.73333, lon: -109.33333 },  
-  { name: "Cutknife", lat: 52.7333, lon: -109.3333 },  
-  { name: "Eston", lat: 51.21667, lon: -108.63333 },  
-  { name: "Foam Lake", lat: 51.65001, lon: -103.53431 },  
-  { name: "Indian Head", lat: 50.51667, lon: -103.61667 },  
-  { name: "Jasper", lat: 52.0, lon: -106.0 } // approximate placeholder, verify  
-];
-
+      { name: "Buffalo Narrows", lat: 55.8667, lon: -108.5333 },
+      { name: "Canora", lat: 51.6333, lon: -102.4333 },
+      { name: "Cabri", lat: 50.6167, lon: -108.4500 },
+      { name: "Shellbrook", lat: 53.2167, lon: -106.4000 }
     ];
-       const reservations = [
+
+    const reservations = [
       { name: "Whitecap Dakota First Nation", lat: 51.923, lon: -106.700 },
       { name: "Muskeg Lake Cree Nation", lat: 52.866, lon: -106.517 },
       { name: "Mistawasis Nêhiyawak", lat: 52.900, lon: -106.767 },
@@ -188,32 +133,12 @@
       { name: "Cowessess First Nation", lat: 50.415, lon: -102.241 },
       { name: "Star Blanket Cree Nation", lat: 50.766, lon: -103.617 },
       { name: "Onion Lake Cree Nation", lat: 53.7167, lon: -109.5000 },
-      { name: "Thunderchild First Nation", lat: 52.7833, lon: -109.1670 },
-      { name: "Peepeekisis Cree Nation", lat: 50.7500, lon: -103.4670 },
-      { name: "Muscowpetung Saulteaux Nation", lat: 50.8333, lon: -104.4000 },
-      { name: "Ahtahkakoop Cree Nation", lat: 53.0000, lon: -106.5500 },
-      { name: "Little Pine First Nation", lat: 53.1000, lon: -107.5000 },
-      { name: "Cumberland House Cree Nation", lat: 53.9500, lon: -102.2000 },
-      { name: "Fond du Lac Dene Nation", lat: 59.6333, lon: -108.0500 },
-      { name: "Ochapowace First Nation", lat: 50.2667, lon: -102.7833 },
-      { name: "Hatchet Lake First Nation", lat: 58.5833, lon: -105.2500 },
-      { name: "Moosomin First Nation", lat: 50.0833, lon: -102.7167 },
-      { name: "Red Pheasant Cree Nation", lat: 53.1333, lon: -108.5833 },
-      { name: "Beardy's & Okemasis Cree Nation", lat: 52.9500, lon: -106.1000 }
-           { name: "Sweetgrass First Nation", lat: 52.7654634, lon: -108.7159253 },  // from place-names data :contentReference[oaicite:5]{index=5}  
-  { name: "George Gordon First Nation", lat: 50.484, lon: -103.487 },         // approximate (check with First Nation Profiles)  
-  { name: "Piapot First Nation", lat: 49.516, lon: -107.8 },                   // approximate  
-  { name: "White Bear First Nation", lat: 50.133, lon: -102.566 },            // approximate  
-  { name: "Okanese First Nation", lat: 50.800, lon: -103.9 },                  // approximate  
-  { name: "Carry The Kettle First Nation", lat: 50.383, lon: -103.383 },       // approximate  
-  { name: "Montreal Lake First Nation", lat: 54.233, lon: -105.0 },            // approximate  
-  { name: "Red Earth First Nation", lat: 54.000, lon: -104.7 },                // approximate  
-  { name: "Shoal Lake First Nation", lat: 53.900, lon: -105.5 },               // approximate  
-  { name: "Sturgeon Lake First Nation", lat: 53.900, lon: -105.383 } 
+      { name: "Thunderchild First Nation", lat: 52.7833, lon: -109.1670 }
     ];
 
     let combinedPlaces = [...towns, ...reservations];
-    let fuse = null;
+    let fuse = new Fuse(combinedPlaces, { keys:["name"], includeScore:true, threshold:0.4 });
+
     const suggestionBox = document.getElementById("suggestions");
 
     function haversine(lat1, lon1, lat2, lon2) {
@@ -233,7 +158,7 @@
           combinedPlaces.push({ name: docSnap.id, obrians: data.obrians, distance: data.distance, lat:data.lat||undefined, lon:data.lon||undefined });
         });
       } catch(err){console.error(err);}
-      fuse = new Fuse(combinedPlaces,{keys:["name"],includeScore:true,threshold:0.4});
+      fuse.setCollection(combinedPlaces);
     }
 
     async function addOverride() {
@@ -243,7 +168,7 @@
       if(!name || !obrians || Number.isNaN(distance)) return alert("Fill all fields!");
       const docId = name.toLowerCase();
       await setDoc(doc(db,"overrides",docId),{obrians,distance});
-      combinedPlaces.push({name,obrians,distance}); if(fuse) fuse.setCollection(combinedPlaces);
+      combinedPlaces.push({name,obrians,distance}); fuse.setCollection(combinedPlaces);
       document.getElementById("customName").value=""; document.getElementById("customObrians").value=""; document.getElementById("customDistance").value="";
       alert("Override saved.");
     }
@@ -261,7 +186,6 @@
     }
 
     async function findClosest(inputOverride) {
-      if(!fuse) return alert("Loading data...");
       const input=(inputOverride||document.getElementById("town").value).trim();
       if(!input) return alert("Enter a town!");
       const carAnimContainer=document.getElementById("car-animation");
@@ -280,7 +204,7 @@
       else if(place.lat!==undefined && place.lon!==undefined){locations.forEach(loc=>{const d=haversine(place.lat,place.lon,loc.lat,loc.lon); if(d<minDist){minDist=d;closest=loc;}});}
       else{document.getElementById("result").innerText="No distance data"; return;}
 
-      const duration=Math.min(Math.max(minDist*10,800),2500); // speed based on distance
+      const duration=Math.min(Math.max(minDist*10,800),2500);
       car.style.transition=`left ${duration}ms linear`;
       fill.style.transition=`width ${duration}ms linear`;
       setTimeout(()=>{car.style.left="calc(100% - 50px)"; fill.style.width="100%"; },10);
@@ -313,3 +237,4 @@
   </script>
 </body>
 </html>
+
